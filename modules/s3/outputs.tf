@@ -66,6 +66,12 @@ output "credentials_for_aws_cli" {
   sensitive = true
 }
 
+output "password_encrypted" {
+  description = "The encrypted console password (if PGP key is provided and password was created)"
+  value       = var.create_password && var.pgp_key != "" ? try(aws_iam_user_login_profile.s3_user_profile[0].encrypted_password, null) : null
+  sensitive   = true
+}
+
 output "s3_url" {
   description = "The S3 URL for the bucket"
   value       = "s3://${var.bucket_name}/${var.prefix != "" ? "${var.prefix}/" : ""}"

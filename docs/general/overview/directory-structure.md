@@ -3,18 +3,40 @@
 ## Current Directory Structure
 
 ```bash
-xneuro-core/
-├── docs/
-│   ├── dev/                           # docs for developer, easy for edit and read
-│   ├── AI/                            # AI generated docs, summaries. AI generated docs are too comprehensive to read, so should only used for reference only.
-│   │   └── summaries/                 # summary dir for each task coding agent done
-│   ├── examples/                      # usecases/examples of how to use some features in this repo
-│   └── general/                       # general docs for other user
-│       ├── overview/                  # overview of this repo, coding agent should always load content in this dir to take a overview of this repo
-│       │   ├── directory-structure.md # directory structure of this repo
-│       │   ├── resource.md            # resources for this repo, for example how to get logs from loki api endpoint
-│       │   └── standards.md           # include all the standards of this repo, for example coding standards, design standards, doc standards
-│       ├── features/                  # all features of this repo
-│       └── components/                # docs of all components in this repo
-└── package.json
+terraform-modules/
+├── docs/                              # documentation directory
+│   ├── dev/                           # developer documentation, easy to edit and read
+│   │   ├── README.md                  # developer guide
+│   │   ├── TODO.md                    # development tasks
+│   │   ├── arch.md                    # architecture documentation
+│   │   ├── development.md             # development guidelines
+│   │   ├── feature.md                 # feature documentation
+│   │   ├── prd.md                     # product requirements
+│   │   └── prompt-examples.md         # AI prompt examples
+│   ├── AI/                            # AI generated documentation
+│   │   └── summaries/                 # AI-generated summaries for each coding task (reference only)
+│   ├── examples/                      # use cases and examples
+│   ├── external/                      # external documentation and references
+│   └── general/                       # general documentation for users
+│       ├── overview/                  # repository overview
+│       │   ├── directory-structure.md # this file - repository structure
+│       │   ├── resources.md           # repository resources (log endpoints, etc.)
+│       │   └── standards.md           # coding standards, design standards, doc standards
+│       └── features/                  # feature documentation
+├── examples/                          # Terraform usage examples
+│   ├── aws/                           # AWS-specific examples
+│   ├── basic/                         # basic usage examples
+│   ├── huaweicloud/                   # HuaweiCloud-specific examples
+│   ├── multi-cloud/                   # multi-cloud deployment examples
+│   └── s3/                            # S3 storage examples
+├── templates/                         # Terraform configuration templates
+│   ├── terraform.tfvars.example       # example variables file
+│   ├── provider.tf.aws.example        # AWS provider configuration
+│   ├── provider.tf.huaweicloud.example # HuaweiCloud provider configuration
+│   └── README.md                      # template documentation
+├── .claude/                           # Claude AI configuration
+├── main.tf                            # main Terraform configuration
+├── variables.tf                       # Terraform variable definitions
+├── outputs.tf                         # Terraform output definitions
+└── README.md                          # repository main README
 ```

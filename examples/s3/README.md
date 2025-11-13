@@ -20,6 +20,7 @@ module "s3_full_bucket_access" {
   bucket_name       = "my-existing-bucket"
   prefix           = ""  # Empty prefix means access to entire bucket
   user_name_prefix = "full-bucket"
+  create_password  = false  # No console access, only API keys
 }
 ```
 
@@ -33,6 +34,7 @@ module "s3_prefix_access" {
   bucket_name       = "my-existing-bucket"
   prefix           = "user-uploads/documents"
   user_name_prefix = "doc-uploader"
+  create_password  = false  # No console access, only API keys
 }
 ```
 
@@ -62,6 +64,7 @@ module "s3_secure_access" {
   user_name_prefix                = "secure-user"
   create_password                 = true
   store_credentials_in_secrets_manager = true
+  # Password will be auto-generated since none is provided
 }
 ```
 
@@ -76,6 +79,7 @@ module "s3_pgp_access" {
   prefix           = "encrypted-files"
   user_name_prefix = "pgp-user"
   pgp_key           = "keybase:yourusername"
+  create_password  = false  # No console access, only API keys
 }
 ```
 
@@ -144,10 +148,40 @@ The generated credentials can be used with:
 terraform destroy
 ```
 
+## Password Management
+
+The module provides flexible password options:
+
+### 1. No Console Access (Default)
+```hcl
+create_password = false  # Only API access keys, no console access
+```
+
+### 2. Auto-generated Password
+```hcl
+create_password = true
+# password = ""  # Empty password will auto-generate a secure one
+```
+
+### 3. Custom Password
+```hcl
+create_password = true
+password = "YourSecurePassword123!"  # Must meet complexity requirements
+```
+
+### 4. PGP-Encrypted Password
+```hcl
+create_password = true
+pgp_key = "keybase:yourusername"  # Encrypts both access key and password
+```
+
 ## Important Notes
 
 - The bucket must already exist before running this module
 - The IAM user cannot access files outside the specified prefix
 - Prefix restrictions are enforced through explicit deny policies
-- Console access requires a password to be set
+- Console access requires `create_password = true`
+- If `create_password = true` and no password is provided, a secure random password will be generated
+- Custom passwords must be at least 8 characters with uppercase, lowercase, and numbers
 - PGP encryption requires a valid PGP key identifier
+- Generated passwords can be retrieved from the `password` output

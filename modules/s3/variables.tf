@@ -21,13 +21,6 @@ variable "create_password" {
   default     = false
 }
 
-variable "password" {
-  description = "Password for the IAM user (required if create_password is true)"
-  type        = string
-  default     = ""
-  sensitive   = true
-}
-
 variable "pgp_key" {
   description = "PGP key for encrypting the access key and password"
   type        = string

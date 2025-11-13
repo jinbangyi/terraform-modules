@@ -16,13 +16,14 @@ provider "aws" {
   region = "us-east-1"
 }
 
-# Example 1: Create user with access to entire bucket
+# Example 1: Create user with access to entire bucket (no console password)
 module "s3_full_bucket_access" {
   source = "../../modules/s3"
 
   bucket_name       = "my-existing-bucket"
   prefix           = ""  # Empty prefix means access to entire bucket
   user_name_prefix = "full-bucket"
+  create_password  = false  # No console access, only API keys
 
   tags = {
     "Project"     = "s3-access-example"
@@ -38,6 +39,7 @@ module "s3_prefix_access" {
   bucket_name       = "my-existing-bucket"
   prefix           = "user-uploads/documents"
   user_name_prefix = "doc-uploader"
+  create_password  = false  # No console access, only API keys
 
   tags = {
     "Project"     = "s3-access-example"
@@ -54,6 +56,7 @@ module "s3_readonly_access" {
   prefix           = "public-files"
   user_name_prefix = "readonly-user"
   read_only        = true
+  create_password  = false  # No console access, only API keys
 
   tags = {
     "Project"     = "s3-access-example"
@@ -62,7 +65,7 @@ module "s3_readonly_access" {
   }
 }
 
-# Example 4: Create user with encrypted credentials stored in Secrets Manager
+# Example 4: Create user with encrypted credentials stored in Secrets Manager (auto-generate password)
 module "s3_secure_access" {
   source = "../../modules/s3"
 
@@ -70,7 +73,7 @@ module "s3_secure_access" {
   prefix                          = "secure-data"
   user_name_prefix                = "secure-user"
   create_password                 = true
-  password                        = "SecurePassword123!" # In production, use a generated password or secret
+  # password = ""  # Empty password will auto-generate a secure one
   store_credentials_in_secrets_manager = true
 
   tags = {
@@ -88,6 +91,7 @@ module "s3_pgp_access" {
   prefix           = "encrypted-files"
   user_name_prefix = "pgp-user"
   pgp_key           = "keybase:yourusername" # Replace with your actual PGP key
+  create_password  = false  # No console access, only API keys
 
   tags = {
     "Project"     = "s3-access-example"

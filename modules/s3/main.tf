@@ -121,12 +121,19 @@ resource "aws_iam_access_key" "s3_user_key" {
   pgp_key = var.pgp_key != "" ? var.pgp_key : null
 }
 
-# Optional: Create login profile if password is provided
+# Optional: Create login profile if password creation is enabled
 resource "aws_iam_user_login_profile" "s3_user_profile" {
-  count    = var.create_password ? 1 : 0
-  user     = aws_iam_user.s3_user.name
-  password = var.password
-  pgp_key  = var.pgp_key != "" ? var.pgp_key : null
+  count   = var.create_password ? 1 : 0
+  user    = aws_iam_user.s3_user.name
+  pgp_key = var.pgp_key != "" ? var.pgp_key : null
+
+  # Password length must be between 4 and 128 characters
+  password_length        = 16
+  password_reset_required = true
+
+  lifecycle {
+    ignore_changes = [password_length, password_reset_required]
+  }
 }
 
 # Store the bucket prefix as a secret for verification
