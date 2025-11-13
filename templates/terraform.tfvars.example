@@ -1,0 +1,35 @@
+# Terraform Variables Configuration Example
+# Copy this file to terraform.tfvars and modify the values as needed
+
+# Core Configuration
+name = "my-infrastructure"
+environment = "production"
+
+# Cloud Provider Selection
+enable_aws = true
+enable_huaweicloud = false
+
+# AWS Configuration (only used when enable_aws = true)
+aws_region = "us-west-2"
+aws_vpc_cidr = "10.0.0.0/16"
+aws_public_subnet_cidrs = ["10.0.1.0/24", "10.0.2.0/24"]
+aws_private_subnet_cidrs = ["10.0.10.0/24", "10.0.20.0/24"]
+aws_instance_type = "t3.micro"
+aws_create_instance = true
+
+# Huawei Cloud Configuration (only used when enable_huaweicloud = true)
+huaweicloud_region = "cn-north-4"
+huaweicloud_vpc_cidr = "192.168.0.0/16"
+huaweicloud_public_subnet_cidrs = ["192.168.1.0/24", "192.168.2.0/24"]
+huaweicloud_private_subnet_cidrs = ["192.168.10.0/24", "192.168.20.0/24"]
+huaweicloud_flavor = "s6.small.1"
+huaweicloud_create_instance = true
+
+# Tags
+tags = {
+  "Project"     = "my-project"
+  "Owner"       = "devops@example.com"
+  "Environment" = "production"
+  "CostCenter"  = "engineering"
+  "ManagedBy"   = "Terraform"
+}

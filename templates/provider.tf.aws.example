@@ -1,0 +1,45 @@
+# AWS Provider Configuration Example
+# Copy this to your configuration file and update with your credentials
+
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
+}
+
+# Configure AWS Provider with credentials
+provider "aws" {
+  region = var.aws_region
+
+  # Option 1: Use static credentials (not recommended for production)
+  # access_key = var.aws_access_key
+  # secret_key = var.aws_secret_key
+
+  # Option 2: Use environment variables (recommended)
+  # Set these environment variables:
+  # export AWS_ACCESS_KEY_ID="your-access-key"
+  # export AWS_SECRET_ACCESS_KEY="your-secret-key"
+  # export AWS_DEFAULT_REGION="us-west-2"
+
+  # Option 3: Use AWS IAM roles (recommended for EC2 instances)
+  # When running on EC2, the provider will automatically use the instance profile
+
+  # Option 4: Use AWS profiles
+  # profile = "default" # or your named profile from ~/.aws/credentials
+}
+
+# Uncomment these variables if using static credentials
+# variable "aws_access_key" {
+#   description = "AWS access key"
+#   type        = string
+#   sensitive   = true
+# }
+#
+# variable "aws_secret_key" {
+#   description = "AWS secret key"
+#   type        = string
+#   sensitive   = true
+# }

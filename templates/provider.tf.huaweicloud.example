@@ -1,0 +1,71 @@
+# Huawei Cloud Provider Configuration Example
+# Copy this to your configuration file and update with your credentials
+
+terraform {
+  required_providers {
+    huaweicloud = {
+      source  = "huaweicloud/huaweicloud"
+      version = "~> 1.50"
+    }
+  }
+}
+
+# Configure Huawei Cloud Provider with credentials
+provider "huaweicloud" {
+  region = var.huaweicloud_region
+
+  # Option 1: Use static credentials (not recommended for production)
+  # access_key = var.huaweicloud_access_key
+  # secret_key = var.huaweicloud_secret_key
+  # project_name = var.huaweicloud_project_name
+
+  # Option 2: Use environment variables (recommended)
+  # Set these environment variables:
+  # export HUAWEICLOUD_ACCESS_KEY="your-access-key"
+  # export HUAWEICLOUD_SECRET_KEY="your-secret-key"
+  # export HUAWEICLOUD_PROJECT_NAME="your-project-name"
+  # export HUAWEICLOUD_REGION_NAME="cn-north-4"
+
+  # Option 3: Use configuration file
+  # Create a configuration file at ~/.huaweicloud/config
+  # Format:
+  # [default]
+  # ak = your-access-key
+  # sk = your-secret-key
+  # project_name = your-project-name
+  # region = cn-north-4
+
+  # Option 4: Use agency (temporary credentials)
+  # agency_name = var.agency_name
+  # agency_domain_name = var.agency_domain_name
+}
+
+# Uncomment these variables if using static credentials
+# variable "huaweicloud_access_key" {
+#   description = "Huawei Cloud access key"
+#   type        = string
+#   sensitive   = true
+# }
+#
+# variable "huaweicloud_secret_key" {
+#   description = "Huawei Cloud secret key"
+#   type        = string
+#   sensitive   = true
+# }
+#
+# variable "huaweicloud_project_name" {
+#   description = "Huawei Cloud project name"
+#   type        = string
+# }
+#
+# variable "agency_name" {
+#   description = "Huawei Cloud agency name"
+#   type        = string
+#   default     = null
+# }
+#
+# variable "agency_domain_name" {
+#   description = "Huawei Cloud agency domain name"
+#   type        = string
+#   default     = null
+# }
