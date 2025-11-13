@@ -18,49 +18,52 @@ data "aws_s3_bucket" "existing_bucket" {
 
 # IAM policy document for S3 bucket access with prefix restriction
 data "aws_iam_policy_document" "s3_bucket_access" {
+  # Allow object-level operations only within the specified prefix
   statement {
-    sid    = "S3BucketAndPrefixAccess"
+    sid    = "S3ObjectAccess"
     effect = "Allow"
     actions = [
       "s3:GetObject",
       "s3:PutObject",
       "s3:DeleteObject",
-      "s3:ListBucket",
-      "s3:GetBucketLocation",
-      "s3:ListBucketMultipartUploads",
       "s3:ListMultipartUploadParts",
       "s3:AbortMultipartUpload"
     ]
 
     resources = [
-      data.aws_s3_bucket.existing_bucket.arn,                     # Bucket-level access for ListBucket
-      "${data.aws_s3_bucket.existing_bucket.arn}/${var.prefix}/*" # Object-level access with prefix restriction
+      "${data.aws_s3_bucket.existing_bucket.arn}/${var.prefix}/*"
     ]
   }
 
+  # Allow bucket-level operations with prefix restriction
   statement {
-    sid    = "S3DenyAccessOutsidePrefix"
-    effect = "Deny"
+    sid    = "S3BucketLevelAccess"
+    effect = "Allow"
     actions = [
-      "s3:GetObject",
-      "s3:PutObject",
-      "s3:DeleteObject"
+      "s3:ListBucket",
+      "s3:GetBucketLocation",
+      "s3:ListBucketMultipartUploads"
     ]
 
     resources = [
-      "${data.aws_s3_bucket.existing_bucket.arn}/*"
+      data.aws_s3_bucket.existing_bucket.arn
     ]
 
+    # Restrict ListBucket to only show objects within the prefix
     condition {
-      test     = "StringNotLike"
+      test     = "StringLike"
       variable = "s3:prefix"
-      values   = ["${var.prefix}/*"]
+      values   = [
+        "${var.prefix}/*",
+        "${var.prefix}"
+      ]
     }
   }
 
+  # Allow ListBucket without prefix parameter (required for some operations)
   statement {
-    sid    = "S3DenyListOutsidePrefix"
-    effect = "Deny"
+    sid    = "S3ListBucketRoot"
+    effect = "Allow"
     actions = [
       "s3:ListBucket"
     ]
@@ -70,9 +73,9 @@ data "aws_iam_policy_document" "s3_bucket_access" {
     ]
 
     condition {
-      test     = "StringNotLike"
-      variable = "s3:prefix"
-      values   = ["${var.prefix}/*", "${var.prefix}"]
+      test     = "StringLike"
+      variable = "s3:delimiter"
+      values   = ["/"]
     }
   }
 }
